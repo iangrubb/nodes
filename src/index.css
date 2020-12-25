@@ -8,11 +8,14 @@
 
   --white: #EEEEEE;
 
-  --shadow: #222831cc;
+  --shadow: #181a1de5;
+}
+
+* {
+  box-sizing: border-box;
 }
 
 body {
-  box-sizing: border-box;
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',

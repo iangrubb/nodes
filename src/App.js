@@ -29,6 +29,10 @@ function App() {
 
   return (
     <Container>
+      <UILayer>
+        <PopUp></PopUp>
+        <PopUp></PopUp>
+      </UILayer>
       <Window ref={windowEl}>
         {nodes.map((node, idx) => <Node key={idx} {...node} />)}
       </Window>
@@ -42,21 +46,48 @@ export default App;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-  background: var(--dark-gray);
+
+  overflow: hidden;
+`
+
+const PopUp = styled.div`
+  width: 300px;
+  height: 120px;
+
+  background: var(--light-gray);
+
+  pointer-events: auto;
+
+  box-shadow: 2px 1px 4px var(--shadow);
+  border-radius: 4px;
+
+`
+
+const UILayer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2;
+
+  padding: 40px;
+
+  pointer-events: none;
 
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
 `
 
 const Window = styled.div`
-  width: 1000px;
-  height: 600px;
+  width: 100vw;
+  height: 100vh;
 
   position: relative;
+  z-index: 1;
   
-  background: var(--light-gray);
+  background: var(--dark-gray);
 
-  border: 4px solid var(--white);
-  border-radius: 4px;
 `

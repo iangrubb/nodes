@@ -10,12 +10,11 @@ import { useSpring, animated, interpolate } from 'react-spring'
 
 const Node = ({x, y}) => {
 
-    const width = 60
-    const height = 60
+    const [{ radius } , setRadius] = useSpring(() => ({radius: 30, from: {radius: 0}, config: {tension: 640}}))
 
-    const [{ position }, setPosition] = useSpring(() => ({position: [x - (width / 2), y - (height / 2)], config: {tension: 380, mass: 0.2}}))
+    const [{ position }, setPosition] = useSpring(() => ({position: [x, y], config: {tension: 380, mass: 0.2}}))
 
-    const [{ lift }, setLift] = useSpring(() => ({lift: 0, config: {tension: 280, clamp: true}}))
+    const [{ lift }, setLift] = useSpring(() => ({lift: 0, config: {tension: 480, clamp: true}}))
 
     const nodeEl = useRef(null)
 
@@ -30,7 +29,7 @@ const Node = ({x, y}) => {
         const nodeDrag$ = nodeClick$.pipe(
             switchMap(startEvent => fromEvent(document, "mousemove").pipe(
                 map(e => {
-                    return ({x: e.layerX - (width / 2), y: e.layerY - (height / 2), movementX: e.movementX, movementY: e.movementY})
+                    return ({x: e.layerX, y: e.layerY, movementX: e.movementX, movementY: e.movementY})
                 } ),
                 takeUntil(fromEvent(document, "mouseup"))
             ))
@@ -57,11 +56,11 @@ const Node = ({x, y}) => {
     }, [setPosition, setLift])
 
     return (
-        <Container ref={nodeEl} width={width} height={height} lift={lift} style={
+        <Container ref={nodeEl} lift={lift} style={
             {
-                transform: interpolate([lift, position], (l, [x, y]) => `translate3d(${x}px,${y}px,0) scale(${1 + 0.1 * l})`),
+                transform: interpolate([lift, position, radius], (l, [x, y], r) => `translate3d(${x - 50}px,${y - 50}px,0) scale(${ (r / 50) + 0.1 * l})`),
                 zIndex: lift.interpolate(lift => `${lift > 0.1 ? 2 : 1}`),
-                boxShadow: lift.interpolate(lift => `${1 + 2 * lift}px ${1 + 1 * lift}px ${2 + 6 * lift}px var(--shadow)`)
+                boxShadow: lift.interpolate(lift => `${2 + 2 * lift}px ${1 + 1 * lift}px ${4 + 6 * lift}px var(--shadow)`)
             }
         } >
             1
@@ -80,8 +79,9 @@ const Container = styled(animated.div)`
     top: 0;
     left: 0;
 
-    width: ${props => props.width}px;
-    height: ${props => props.height}px;
+    width: 100px;
+    height: 100px;
+
     border-radius: 50%;
 
     cursor: move;
@@ -92,9 +92,9 @@ const Container = styled(animated.div)`
     align-items: center;
 
     font-weight: 700;
-    font-size: 20px;
+    font-size: 24px;
     color: var(--white);
+
+    user-select: none;
     
 `
-
-
