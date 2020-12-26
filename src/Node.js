@@ -92,7 +92,7 @@ const Container = styled(animated.div)`
     align-items: center;
 
     font-weight: 700;
-    font-size: 24px;
+    font-size: 32px;
     color: var(--white);
 
     user-select: none;

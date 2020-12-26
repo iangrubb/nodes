@@ -8,7 +8,12 @@ import { filter } from 'rxjs/operators'
 
 import Node from './Node'
 
+import { CgArrowLongRightC, CgCode, CgArrowTopLeft, CgController } from "react-icons/cg";
+
 function App() {
+
+  const [mode, setMode] = useState("SELECT")
+
 
   const [nodes, setNodes] = useState([])
 
@@ -30,8 +35,21 @@ function App() {
   return (
     <Container>
       <UILayer>
-        <PopUp></PopUp>
-        <PopUp></PopUp>
+        <PopUp>
+          <UIButton active={mode === "SELECT"} onClick={()=>setMode("SELECT")}>
+            <SelectArrowSymbol></SelectArrowSymbol>
+          </UIButton>
+          <UIButton active={mode === "DRAG"} onClick={()=>setMode("DRAG")}>
+            <DragSymbol></DragSymbol>
+          </UIButton>
+          <UIButton active={mode === "CREATE"} onClick={()=>setMode("CREATE")}>
+            <NodeArrowSymbol></NodeArrowSymbol>
+          </UIButton>
+          {/* <UIButton active={mode === "CODE"} onClick={()=>setMode("CODE")}>
+            <CodeSymbol></CodeSymbol>
+          </UIButton> */}
+        </PopUp>
+        
       </UILayer>
       <Window ref={windowEl}>
         {nodes.map((node, idx) => <Node key={idx} {...node} />)}
@@ -50,9 +68,57 @@ const Container = styled.div`
   overflow: hidden;
 `
 
+const UIButton = styled.button`
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  cursor: pointer;
+
+  width: 42px;
+  height: 42px;
+
+  margin: 4px;
+
+  border-radius: 2px;
+  border: none;
+
+  color: var(--white);
+
+  transition: transform 0.1s ease, box-shadow 0.1s ease;
+
+  transform: translateY(${props => props.active ? 1 : -1 }px);
+  box-shadow: ${props => props.active ? '1px 1px 1px var(--shadow)' : '2px 2px 2px var(--shadow)' };
+  background: ${props => props.active ? 'var(--dark-blue)' : 'var(--dark-gray)'};
+
+
+  &:active {
+    background: ${props => props.active ? 'var(--light-gray)' : 'var(--dark-gray)'};
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+`
+
+const fullSize = icon => styled(icon)`
+  width: 100%;
+  height: 100%;
+`
+
+const SelectArrowSymbol = fullSize(CgArrowTopLeft)
+
+const DragSymbol = fullSize(CgController)
+
+const NodeArrowSymbol = fullSize(CgArrowLongRightC)
+
+const CodeSymbol = fullSize(CgCode)
+
 const PopUp = styled.div`
-  width: 300px;
-  height: 120px;
+
+  padding: 4px;
 
   background: var(--light-gray);
 
@@ -60,6 +126,8 @@ const PopUp = styled.div`
 
   box-shadow: 2px 1px 4px var(--shadow);
   border-radius: 4px;
+
+  display: flex;
 
 `
 
