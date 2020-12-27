@@ -1,8 +1,8 @@
-import { useState, useEffect, useRef } from 'react'
+import { useEffect, useRef } from 'react'
 
-import { fromEvent, merge } from "rxjs"
+import { fromEvent } from "rxjs"
 
-import { switchMap, takeWhile, map, takeUntil, switchMapTo } from "rxjs/operators"
+import { switchMap, map, takeUntil, switchMapTo } from "rxjs/operators"
 
 import styled from 'styled-components'
 
