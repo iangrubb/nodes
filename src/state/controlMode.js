@@ -8,5 +8,5 @@ export const controlModes = {
 
 export const controlModeState = atom({
     key: "controlModeState",
-    default: controlModes.select
+    default: controlModes.create
 })

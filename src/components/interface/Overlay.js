@@ -14,9 +14,9 @@ const Overlay = () => {
     return (
         <Container>
             <MainUI>
+                <ControlModeButton mode={controlModes.create} Icon={CgArrowLongRightC}/>
                 <ControlModeButton mode={controlModes.select} Icon={CgArrowTopLeft}/>
                 <ControlModeButton mode={controlModes.drag} Icon={CgController}/>
-                <ControlModeButton mode={controlModes.create} Icon={CgArrowLongRightC}/>
             </MainUI>
         </Container>
     )

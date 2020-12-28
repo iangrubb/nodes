@@ -1,35 +1,25 @@
-import { useState, useEffect, useRef } from "react"
+import { useState, useRef } from "react"
 
 import styled from 'styled-components'
 
-import { fromEvent } from "rxjs"
-
-import { filter } from 'rxjs/operators'
-
 import Node from './Node'
+
+import useCreateControls from './controlHooks/useCreateControls'
+
+import { useRecoilValue } from 'recoil'
+import { nodesList } from '../../state/nodes'
 
 const Window = () => {
 
-    const [nodes, setNodes] = useState([])
+    const nodes = useRecoilValue(nodesList)
 
     const windowEl = useRef(null)
 
-    useEffect(() => {
-
-        const windowClick$ = fromEvent(windowEl.current, "mousedown").pipe(
-        filter(e => e.target === windowEl.current)
-        )
-
-        const clickSubscription = windowClick$.subscribe(e => {
-        setNodes(nodes => [...nodes, {x: e.offsetX, y: e.offsetY}])
-        })
-
-        return () => clickSubscription.unsubscribe()
-    }, [setNodes])
+    const arrowPreview = useCreateControls(windowEl)
 
     return (
         <Container ref={windowEl}>
-            {nodes.map((node, idx) => <Node key={idx} {...node} />)}
+            {nodes.map(id => <Node key={id} id={id} />)}
         </Container>
     )
 }

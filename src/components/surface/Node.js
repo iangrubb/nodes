@@ -8,7 +8,13 @@ import styled from 'styled-components'
 
 import { useSpring, animated, interpolate } from 'react-spring'
 
-const Node = ({x, y}) => {
+
+import { useRecoilValue } from 'recoil'
+import { nodeDetails } from '../../state/nodes'
+
+const Node = ({id}) => {
+
+    const {x, y} = useRecoilValue(nodeDetails(id))
 
     const [{ radius } , setRadius] = useSpring(() => ({radius: 30, from: {radius: 0}, config: {tension: 640}}))
 
@@ -18,42 +24,42 @@ const Node = ({x, y}) => {
 
     const nodeEl = useRef(null)
 
-    useEffect(() => {
+    // useEffect(() => {
 
-        const nodeClick$ = fromEvent(nodeEl.current, "mousedown")
+    //     const nodeClick$ = fromEvent(nodeEl.current, "mousedown")
 
-        const nodeRelease$ = nodeClick$.pipe(
-            switchMapTo(fromEvent(document, "mouseup"))
-        )
+    //     const nodeRelease$ = nodeClick$.pipe(
+    //         switchMapTo(fromEvent(document, "mouseup"))
+    //     )
 
-        const nodeDrag$ = nodeClick$.pipe(
-            switchMap(startEvent => fromEvent(document, "mousemove").pipe(
-                map(e => {
-                    return ({x: e.layerX, y: e.layerY, movementX: e.movementX, movementY: e.movementY})
-                } ),
-                takeUntil(fromEvent(document, "mouseup"))
-            ))
-        )
+    //     const nodeDrag$ = nodeClick$.pipe(
+    //         switchMap(startEvent => fromEvent(document, "mousemove").pipe(
+    //             map(e => {
+    //                 return ({x: e.layerX, y: e.layerY, movementX: e.movementX, movementY: e.movementY})
+    //             } ),
+    //             takeUntil(fromEvent(document, "mouseup"))
+    //         ))
+    //     )
 
-        const clickSubscription = nodeClick$.subscribe(() => {
-            setLift({lift: 1})
-        })
+    //     const clickSubscription = nodeClick$.subscribe(() => {
+    //         setLift({lift: 1})
+    //     })
 
-        const dragSubscription = nodeDrag$.subscribe(({x, y, movementX, movementY}) => {
-            setPosition({ position: [x, y], tilt: [movementX, movementY] })
-        })
+    //     const dragSubscription = nodeDrag$.subscribe(({x, y, movementX, movementY}) => {
+    //         setPosition({ position: [x, y], tilt: [movementX, movementY] })
+    //     })
 
-        const releaseSubscription = nodeRelease$.subscribe(() => {
-            setLift({lift: 0})
-        })
+    //     const releaseSubscription = nodeRelease$.subscribe(() => {
+    //         setLift({lift: 0})
+    //     })
 
-        return () => {
-            clickSubscription.unsubscribe()
-            dragSubscription.unsubscribe()
-            releaseSubscription.unsubscribe()
-        }
+    //     return () => {
+    //         clickSubscription.unsubscribe()
+    //         dragSubscription.unsubscribe()
+    //         releaseSubscription.unsubscribe()
+    //     }
 
-    }, [setPosition, setLift])
+    // }, [setPosition, setLift])
 
     return (
         <Container ref={nodeEl} lift={lift} style={
@@ -84,8 +90,6 @@ const Container = styled(animated.div)`
 
     border-radius: 50%;
 
-    cursor: move;
-    cursor: grab;
 
     display: flex;
     justify-content: center;
